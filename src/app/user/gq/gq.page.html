@@ -1,0 +1,33 @@
+<ion-header>
+	<ion-toolbar>
+	  <ion-title>HEDAX-12 Questionnaire</ion-title>
+	</ion-toolbar>
+  </ion-header>
+  
+  <ion-content class="ion-padding">
+
+	<ion-progress-bar [value]="(currentQuestionIndex + 1) / questions.length"></ion-progress-bar>
+
+	<div *ngIf="currentQuestion">
+		<h2>{{ currentQuestion.question }}</h2>
+		<ion-list>
+		  <ion-radio-group [(ngModel)]="selectedAnswer" (ngModelChange)="onAnswerSelected($event)">
+			<ion-item *ngFor="let choice of currentQuestion.RESPONSE_CHOICES">
+			  <ion-label>{{ choice[0] }}</ion-label>
+			  <ion-radio [value]="+choice[1]"></ion-radio>
+			</ion-item>
+		  </ion-radio-group>
+		</ion-list>
+	  </div>
+
+	<div *ngIf="isLastQuestion">
+		<ion-button [disabled]="!isLastQuestion || selectedAnswer === undefined || selectedAnswer === null" expand="full" color="primary" (click)="onSubmit()">Submit Questionnaire</ion-button>
+	</div>
+
+	<div class="ion-margin-top">
+		<ion-button [disabled]="isLastQuestion || selectedAnswer === undefined || selectedAnswer === null" expand="full" class="ion-margin-top" color="primary" (click)="onNext()">Next </ion-button>
+		<ion-button [disabled]="currentQuestionIndex === 0" expand="full" class="ion-margin-top" color="primary" (click)="onPrevious()">Previous</ion-button>
+	</div>
+  
+  </ion-content>
+  

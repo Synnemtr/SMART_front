@@ -1,0 +1,23 @@
+<ion-header></ion-header>
+
+<ion-content class="ion-padding">
+  <form id="registration-form" enctype="multipart/form-data" [formGroup]="registrationForm" (ngSubmit)="register()">
+    <div class="title">
+      <h4>Create your account</h4>
+    </div>
+
+    <ion-input class="primary-input" label="Name" label-placement="floating" formControlName="first_name"></ion-input>
+    <ion-input class="primary-input" label="Surname" label-placement="floating" formControlName="last_name"></ion-input>
+    <ion-input class="primary-input" label="Username" label-placement="floating" formControlName="username"></ion-input>
+    <ion-input class="primary-input" label="E-mail adress" label-placement="floating" formControlName="email" type="email"></ion-input>
+    <ion-input class="primary-input" label="Password" label-placement="floating" formControlName="password" type="password"></ion-input>
+    
+    <div class="ion-margin-top">
+      <ion-button type="submit" [disabled]="!registrationForm.valid" expand="block">Create my account</ion-button>
+    </div>
+    
+    <div class="ion-margin-top ion-text-center">
+      <a (click)="dismiss()">Close</a>
+    </div>
+  </form>
+</ion-content>

@@ -1,0 +1,104 @@
+<ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-back-button defaultHref="/tabs/progress"></ion-back-button>
+      </ion-buttons>
+      <ion-title> Achievements</ion-title>
+    </ion-toolbar>
+  </ion-header>
+
+  <ion-content>
+    <ion-card *ngIf="rankingAchievements && userAchievements && allAchievements && activeAchievements" class="card">
+
+      <ion-card>
+        <ion-card-header expand="full" class="title" color="primary">
+          <ion-card-title> Achievement Ranking</ion-card-title>
+        </ion-card-header>
+      
+        <ion-card-content>
+          <ion-item>
+            <ion-grid>
+              <ion-row>
+                <ion-col> Username  </ion-col>
+                <ion-col> Number of achievements </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-item>
+          <ion-list>
+            <ion-item *ngFor="let user of rankingAchievements">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>{{ user.username }}</ion-col>
+                  <ion-col>{{ user.achievement_count }}</ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header expand="full" class="title" color="primary">
+          <ion-card-title>Active Achievements </ion-card-title>
+        </ion-card-header>
+
+        <ion-card-content>
+          <ion-list>
+            <ion-item *ngFor="let achievement of activeAchievements | keyvalue">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>
+                    {{achievement.key}}
+                    <ion-progress-bar value="{{achievement.value[0]/achievement.value[1]}}"></ion-progress-bar>
+                  </ion-col>
+                  <ion-col> <ion-button expand="full" class="ion-margin-top" color="primary" (click)="removeActiveAchievement(achievement.key)">Remove</ion-button></ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header expand="full" class="title" color="primary">
+          <ion-card-title> All Achievements </ion-card-title>
+        </ion-card-header>
+      
+        <ion-card-content>
+          <ion-list>
+            <ion-item *ngFor="let achievement of allAchievements">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>{{ achievement.name }}</ion-col>
+                  <ion-col>{{ achievement.description }}</ion-col>
+                </ion-row>
+              </ion-grid>
+              <div>
+                <ion-button expand="full" class="ion-margin-top" color="primary" (click)="addActiveAchievement(achievement.name, achievement.description)">Add to active achievements</ion-button>
+              </div>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+      <ion-card>
+        <ion-card-header expand="full" class="title" color="primary">
+          <ion-card-title> User Achievements </ion-card-title>
+        </ion-card-header>
+      
+        <ion-card-content>
+          <ion-list>
+            <ion-item *ngFor="let achievement of userAchievements">
+              <ion-grid>
+                <ion-row>
+                  <ion-col>{{ achievement.name }}</ion-col>
+                  <ion-col>{{ achievement.description }}</ion-col>
+                </ion-row>
+              </ion-grid>
+            </ion-item>
+          </ion-list>
+        </ion-card-content>
+      </ion-card>
+
+    </ion-card>
+  </ion-content>

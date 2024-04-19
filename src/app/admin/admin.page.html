@@ -1,0 +1,31 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title> Admin Page</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let user of allUsers">
+    <ion-card-header expand="full" class="title" color="primary">
+      <ion-card-title> {{ user.username }} </ion-card-title>
+      <p> {{ user.id }} </p>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p> [placeholder] User information here? </p>
+    </ion-card-content>
+  </ion-card>
+
+  <div *ngFor="let profile of allGameProfiles | keyvalue">
+    <ion-card>
+      <ion-card-header expand="full" class="title" color="primary">
+        <ion-card-title> Profile ID: {{ profile.key }} </ion-card-title>
+      </ion-card-header>
+
+      <ion-card-content *ngFor="let game of profile.value | keyvalue">
+        <p> Gamification Type ID: {{ game.key }} </p>
+        <p> Score: {{ game.value }} </p>
+      </ion-card-content>
+    </ion-card>
+  </div>
+</ion-content>

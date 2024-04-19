@@ -1,0 +1,39 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>
+      Profile
+    </ion-title>
+    <ion-buttons slot="end">
+      <ion-button *ngIf="isAdmin" (click)="toAdminPage()">
+        <ion-icon src="../../../assets/icon-admin.svg"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    
+  <ion-card *ngIf="user && profile" class="card">
+    <ion-card class="right-side-card">
+      <img [src]="profile.picture" alt="Profile Picture" *ngIf="profile.picture" class="img_size">
+    </ion-card>
+    <ion-card-header>
+      <ion-card-title>{{ user.username }}</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <p>First name: {{ user.first_name }}</p>
+      <p>Last name: {{ user.last_name }}</p>
+      <p>Email: {{ user.email }}</p>
+      <p>Total Points: {{ profile.total_points }}</p>
+      <p>Goal: {{ profile.goal }}</p>
+      <p>Sub-Goal: {{ profile.sub_goal }}</p>
+    </ion-card-content>
+
+    <div class="ion-margin-top">
+      <ion-button expand="full" class="ion-margin-top" color="primary" (click)="toPersonalDetails()">Personal Details</ion-button>
+      <ion-button expand="full" class="ion-margin-top" color="primary" (click)="logout()">Log out</ion-button>
+    </div>
+    
+  </ion-card>
+</ion-content>

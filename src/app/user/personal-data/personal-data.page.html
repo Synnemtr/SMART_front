@@ -1,0 +1,29 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-back-button defaultHref="/tabs/profile"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Personal Details</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngIf="profile">
+
+    <ion-card-content>
+      <p>BMR: {{ profile.bmr }}</p>
+      <p>BMI: {{ profile.bmi }}</p>
+      <p>Sex: {{ profile.sex }}</p>
+      <p>Date of birth: {{ profile.date_of_birth }}</p>
+      <p>Weight: {{ profile.weight }}</p>
+      <p>Height: {{ profile.height }}</p>
+      <p>Training per week: {{ profile.training_per_week }}</p>
+      <p>Preferred Diet: {{ profile.preferred_diet }}</p>
+    </ion-card-content>
+
+    <!-- <div class="ion-margin-top">
+      <ion-button expand="full" class="ion-margin-top" color="primary" (click)="toUpdateDetails()">Update Details</ion-button>
+    </div> -->
+
+  </ion-card>
+</ion-content>

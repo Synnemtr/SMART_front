@@ -1,0 +1,55 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start" *ngIf="isUpdate">
+      <ion-back-button defaultHref="/personal-data"></ion-back-button>
+    </ion-buttons>
+    <ion-title>Profile Information</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content class="ion-padding">
+  <form id="profileinfo-form" enctype="multipart/form-data" [formGroup]="isUpdate ? updateProfileForm : profileinfoForm">
+    <div class="title">
+      <h4>Profile Information</h4>
+    </div>
+
+    <ng-container *ngIf="!isUpdate">
+      <ion-select class="primary-input" placeholder="Sex" formControlName="sex">
+        <ion-select-option *ngFor="let choice of sexChoices" [value]="choice.value">{{choice.label}}</ion-select-option>
+      </ion-select>
+
+      <div style="display: flex;">
+        <ion-input class="primary-input" placeholder="Year (YYYY)" type="number" formControlName="year_of_birth"></ion-input>
+        <ion-input class="primary-input" placeholder="Month (MM)" type="number" formControlName="month_of_birth"></ion-input>
+        <ion-input class="primary-input" placeholder="Day (DD)" type="number" formControlName="day_of_birth"></ion-input>
+      </div>
+
+      <ion-input class="primary-input" placeholder="Height (in cm)" type="number" formControlName="height"></ion-input>
+    </ng-container>
+
+    <ion-input class="primary-input" placeholder="Weight (in kg)" type="number" formControlName="weight"></ion-input>
+
+    <ion-select class="primary-input" placeholder="Goal" formControlName="goal" (ionChange)="onGoalChange($event)">
+      <ion-select-option *ngFor="let goal of fitnessGoalChoices"[value]="goal.value">{{ goal.label }}</ion-select-option>
+    </ion-select>
+
+    <ion-item *ngIf="subGoalChoices.length > 0">
+      <ion-select class="primary-input" placeholder="Sub-Goal" formControlName="sub_goal">
+        <ion-select-option *ngFor="let subGoal of subGoalChoices" [value]="subGoal.value">{{ subGoal.label}}</ion-select-option>
+      </ion-select>
+    </ion-item>
+
+    <ion-input class="primary-input" placeholder="Training per week" type="number" formControlName="training_per_week"></ion-input>
+
+    <ion-select class="primary-input" placeholder="Preferred Diet" formControlName="preferred_diet">
+      <ion-select-option *ngFor="let choice of dietChoices" [value]="choice.value">{{choice.label}}</ion-select-option>
+    </ion-select>
+
+    <ion-input type="file" enctype="multipart/form-data" (change)="onFileSelected($event)"> </ion-input>
+
+    <div class="ion-margin-top">
+      <ion-button *ngIf="!isUpdate" [disabled]="!profileinfoForm.valid" expand="block" (click)="registerProfileInfo()">Submit</ion-button>
+      <ion-button *ngIf="isUpdate" [disabled]="!updateProfileForm.valid" expand="block" (click)="updateProfile()">Update</ion-button>
+    </div>
+  </form>
+</ion-content>
