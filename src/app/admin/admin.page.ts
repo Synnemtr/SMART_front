@@ -16,7 +16,7 @@ import { AdminService } from '../services/admin/admin.service';
 })
 export class AdminPage implements OnInit {
   allUsers: any; 
-  allGameProfiles: { [key: string]: { gamification_type_id: number, score: number }[] } = {};
+  userProfiles: any = {};
 
   constructor(
     public modalController: ModalController, 
@@ -25,25 +25,20 @@ export class AdminPage implements OnInit {
 
   ngOnInit() {
     this.getAllUsers()
-    this.getAllGameProfiles()
   }
 
   getAllUsers() { 
     this.adminService.getAllUsers().subscribe((data) => {
       this.allUsers = data;
+      for(let user of this.allUsers) {
+        this.getUserProfile(user.id);
+      }
     });
   }
 
-  getAllGameProfiles() {
-    this.adminService.getAllGameProfiles().subscribe((data: any) => { 
-      this.allGameProfiles = data.reduce((acc: {[key: string]: any}, curr: any) => {
-        if (!acc[curr.profile_id]) {
-          acc[curr.profile_id] = {};
-        }
-        acc[curr.profile_id][curr.gamification_type_id] = curr.score;
-        return acc;
-      }, {});
-    })
+  getUserProfile(id: number){
+    this.adminService.getUserProfile(id).subscribe((data) => {
+      this.userProfiles[id] = data;
+    });
   }
-
 }

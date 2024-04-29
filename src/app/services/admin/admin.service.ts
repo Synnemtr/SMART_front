@@ -16,12 +16,18 @@ export class AdminService {
 
   private headers = new HttpHeaders()
   private allUsersAPI = environment.backendUrl + "/users"
+  private userProfileAPI = environment.backendUrl + "/users/profile"
   private allGameProfilesAPI = environment.backendUrl + "/gamification-profiles/profiles"
 
 
   getAllUsers() {
     this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
     return this.httpClient.get(this.allUsersAPI + "/", {headers: this.headers});
+  }
+
+  getUserProfile(id: number) {
+    this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
+    return this.httpClient.get(this.userProfileAPI + "/" + id + "/", {headers: this.headers});
   }
 
   getAllGameProfiles() {

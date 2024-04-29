@@ -12,20 +12,14 @@
     </ion-card-header>
 
     <ion-card-content>
-      <p> [placeholder] User information here? </p>
+      <p> HEXAD-12 type: {{ userProfiles[user.id]?.HEXAD_12_type }} </p>
+      <div *ngFor="let score of userProfiles[user.id]?.HEXAD_12_scores | keyvalue">
+        <p> {{ score.key }}: {{ score.value }} </p>
+      </div>
+      <p> Motivation SDI: {{ userProfiles[user.id]?.motivation_SDI }} </p>
+      <div *ngFor="let score of userProfiles[user.id]?.motivation_scores | keyvalue">
+        <p> {{ score.key }}: {{ score.value }} </p>
+      </div>
     </ion-card-content>
   </ion-card>
-
-  <div *ngFor="let profile of allGameProfiles | keyvalue">
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title> Profile ID: {{ profile.key }} </ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content *ngFor="let game of profile.value | keyvalue">
-        <p> Gamification Type ID: {{ game.key }} </p>
-        <p> Score: {{ game.value }} </p>
-      </ion-card-content>
-    </ion-card>
-  </div>
 </ion-content>
