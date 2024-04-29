@@ -68,6 +68,10 @@ export class ProgressPage implements OnInit {
     this.currentSubgoalProgress = newProgress;
   } 
 
+  positiveFeedback() {
+
+  }
+
   async toAchievements() {
     this.router.navigate(['achievements']);
   }
