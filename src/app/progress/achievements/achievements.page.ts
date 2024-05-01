@@ -18,8 +18,8 @@ export class AchievementPage implements OnInit {
   rankingAchievements: any;
   userAchievements: any;
   allAchievements: any;
-  // TODO: Make this permanent, mabye store it in the backend?
-  activeAchievements: { [achievement: string]: [number, number] } = {};
+  activeAchievements: any;
+  inputValue: number = 0;
 
   constructor(
     public modalController: ModalController, 
@@ -30,6 +30,7 @@ export class AchievementPage implements OnInit {
     this.getRankingAchievements();
     this.getUserAchievements();
     this.getAllAchievements();
+    this.getActiveAchievement();
   }
 
   getRankingAchievements() {
@@ -38,32 +39,56 @@ export class AchievementPage implements OnInit {
     });
   }
 
-  addActiveAchievement(achievement: any, achievementDescription: string) {
-    const goal = achievementDescription.match(/\d+/);
-    const progressGoal = goal ? parseInt(goal[0], 10) : 0;
-    if (!(achievement in this.activeAchievements)) {
-      this.activeAchievements[achievement] = [0, progressGoal];
-    }
+  getActiveAchievement() {
+    this.progressService.getActiveAchievements().subscribe(
+      data => {
+        this.activeAchievements = data;
+      },
+      error => console.error(error)
+    );
   }
 
-  removeActiveAchievement(achievement: any) {
-    if (achievement in this.activeAchievements) {
-      delete this.activeAchievements[achievement];
-    }
+ addActiveAchievement(achievement_id: number) {
+    const data = {
+        "achievement_id": achievement_id,
+        "current_points": 0
+    };
+    this.progressService.postActiveAchievement(data).subscribe(() => {
+        location.reload();
+    }, 
+    error => console.error(error));
   }
 
-  updateAchievementProgress(achievement: any, progress: number) {
-    if (achievement in this.activeAchievements) {
-      this.activeAchievements[achievement][0] = progress;
-    }
+  removeActiveAchievement(id: any) {
+    this.progressService.deleteActiveAchievement(id).subscribe(() => {
+      this.getUserAchievements();
+    }, 
+    error => console.error(error));
+  }
+
+  updateAchievementProgress(achievement_id: any, progress: number) {
+    const data = {
+      "current_points": progress
+    };
+    this.progressService.putActiveAchievement(achievement_id, data).subscribe(() => {
+      this.checkAchievementProgress(achievement_id);
+      this.getUserAchievements();
+    });
   }
 
   checkAchievementProgress(achievement: any) {
-    if (this.activeAchievements[achievement][0] >= this.activeAchievements[achievement][1]) { 
-      this.progressService.newUserAchievement(achievement.id);
-      this.userAchievements.push(achievement);
-      delete this.activeAchievements[achievement];
+    const activeAchievement = this.activeAchievements.find((a: any) => a.achievement_id === achievement.achievement_id);
+    const generalAchievement = this.allAchievements.find((a: any) => a.achievement_id === achievement.achievement_id);
+
+    if (activeAchievement && generalAchievement && activeAchievement.current_points >= generalAchievement.threshold) {
+      this.postUserAchievement(achievement.achievement_id);
+      this.removeActiveAchievement(achievement.achievement_id);
+      this.getUserAchievements();
     }
+  }
+
+  isActiveAchievement(id: number): boolean {
+    return this.activeAchievements.some((achievement: any) => achievement.id === id);
   }
 
   getAllAchievements() {
@@ -75,6 +100,15 @@ export class AchievementPage implements OnInit {
   getUserAchievements() {
     this.progressService.getUserAchievements().subscribe((data) => {
       this.userAchievements = data;
+    });
+  }
+
+  postUserAchievement(achievement_id: any) {
+    const data = {
+      "achievement_id": achievement_id
+    };
+    this.progressService.newUserAchievement(data).subscribe(() => {
+      this.getUserAchievements();
     });
   }
 

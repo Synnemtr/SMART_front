@@ -44,14 +44,21 @@
 
         <ion-card-content>
           <ion-list>
-            <ion-item *ngFor="let achievement of activeAchievements | keyvalue">
+            <ion-item *ngFor="let achievement of activeAchievements">
               <ion-grid>
                 <ion-row>
                   <ion-col>
-                    {{achievement.key}}
-                    <ion-progress-bar value="{{achievement.value[0]/achievement.value[1]}}"></ion-progress-bar>
+                    {{ achievement.name }}
+                    <ion-progress-bar value="{{achievement.current_points/achievement.threshold}}"></ion-progress-bar>
                   </ion-col>
-                  <ion-col> <ion-button expand="full" class="ion-margin-top" color="primary" (click)="removeActiveAchievement(achievement.key)">Remove</ion-button></ion-col>
+                  <!-- <ion-col> <ion-button expand="full" class="ion-margin-top" color="primary" (click)="removeActiveAchievement(achievement.achievement_id)">Remove</ion-button></ion-col> -->
+                  <!-- <ion-input [(ngModel)]="inputValue"></ion-input>
+                  <ion-col>
+                    <ion-button expand="full" class="ion-margin-top" color="primary" 
+                                (click)="updateAchievementProgress(achievement.achievement_id, inputValue)">
+                      Update
+                    </ion-button>
+                  </ion-col> -->
                 </ion-row>
               </ion-grid>
             </ion-item>
@@ -65,8 +72,8 @@
         </ion-card-header>
       
         <ion-card-content>
-          <ion-list>
-            <ion-item *ngFor="let achievement of allAchievements">
+          <ion-list *ngFor="let achievement of allAchievements">
+            <ion-item *ngIf="!isActiveAchievement(achievement.id)">
               <ion-grid>
                 <ion-row>
                   <ion-col>{{ achievement.name }}</ion-col>
@@ -74,7 +81,7 @@
                 </ion-row>
               </ion-grid>
               <div>
-                <ion-button expand="full" class="ion-margin-top" color="primary" (click)="addActiveAchievement(achievement.name, achievement.description)">Add to active achievements</ion-button>
+                <ion-button expand="full" class="ion-margin-top" color="primary" (click)="addActiveAchievement(achievement.id)">Add to active achievements</ion-button>
               </div>
             </ion-item>
           </ion-list>
