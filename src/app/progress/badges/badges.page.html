@@ -13,28 +13,6 @@
   
         <ion-card>
           <ion-card-header expand="full" class="title" color="primary">
-            <ion-card-title>Active Badges </ion-card-title>
-          </ion-card-header>
-  
-          <ion-card-content>
-            <ion-list>
-              <ion-item *ngFor="let badge of activeBadges | keyvalue">
-                <ion-grid>
-                  <ion-row>
-                    <ion-col>
-                      {{badge.key}}
-                      <ion-progress-bar value="{{badge.value[0]/badge.value[1]}}"></ion-progress-bar>
-                    </ion-col>
-                    <ion-col> <ion-button expand="full" class="ion-margin-top" color="primary" (click)="removeActiveBadge(badge.key)">Remove</ion-button></ion-col>
-                  </ion-row>
-                </ion-grid>
-              </ion-item>
-            </ion-list>
-          </ion-card-content>
-        </ion-card>
-  
-        <ion-card>
-          <ion-card-header expand="full" class="title" color="primary">
             <ion-card-title> All Badges </ion-card-title>
           </ion-card-header>
         
@@ -47,9 +25,6 @@
                     <ion-col>{{ badge.description }}</ion-col>
                   </ion-row>
                 </ion-grid>
-                <div>
-                  <ion-button expand="full" class="ion-margin-top" color="primary" (click)="addActiveBadge(badge.name, badge.description)">Add to active badges</ion-button>
-                </div>
               </ion-item>
             </ion-list>
           </ion-card-content>

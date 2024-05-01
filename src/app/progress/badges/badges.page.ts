@@ -17,8 +17,6 @@ import { ProgressService } from 'src/app/services/progress/progress.service';
 export class BadgePage implements OnInit {
   userBadges: any;
   allBadges: any;
-  // TODO: Make this permanent, mabye store it in the backend?
-  activeBadges: { [badge: string]: [number, number] } = {};
 
   constructor(
     public modalController: ModalController, 
@@ -30,34 +28,6 @@ export class BadgePage implements OnInit {
     this.getAllBadges();
   }
 
-  addActiveBadge(badge: any, badgeDescription: string) {
-    const goal = badgeDescription.match(/\d+/);
-    const progressGoal = goal ? parseInt(goal[0], 10) : 0;
-    if (!(badge in this.activeBadges)) {
-      this.activeBadges[badge] = [0, progressGoal];
-    }
-  }
-
-  removeActiveBadge(badge: any) {
-    if (badge in this.activeBadges) {
-      delete this.activeBadges[badge];
-    }
-  }
-
-  updateBadgeProgress(badge: any, progress: number) {
-    if (badge in this.activeBadges) {
-      this.activeBadges[badge][0] = progress;
-    }
-  }
-
-  checkBadgeProgress(badge: any) {
-    if (this.activeBadges[badge][0] >= this.activeBadges[badge][1]) { 
-      this.progressService.newUserBadge(badge.id);
-      this.userBadges.push(badge);
-      delete this.activeBadges[badge];
-    }
-  }
-
   getAllBadges() {
     this.progressService.getBadges().subscribe((data) => {
       this.allBadges = data;
@@ -67,6 +37,15 @@ export class BadgePage implements OnInit {
   getUserBadges() {
     this.progressService.getUserBadges().subscribe((data) => {
       this.userBadges = data;
+    });
+  }
+
+  postUserBadge(badge_id: number) {
+    const data = {
+      "badge_id": badge_id
+    };
+    this.progressService.newUserBadge(data).subscribe(() => {
+      location.reload();
     });
   }
 
