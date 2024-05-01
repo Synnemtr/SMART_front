@@ -19,8 +19,4 @@ export class GqService {
     return this.httpClient.post(this.gamificationAPI + "/questions/", data, {headers: this.header});
   }
 
-  playertype() {
-    return this.httpClient.get(this.gamificationAPI + "/profiles/", {headers: this.header})
-  }
-
 }
