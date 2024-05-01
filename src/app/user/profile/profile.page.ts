@@ -19,7 +19,15 @@ export class ProfilePage implements OnInit {
   user: any;
   isAdmin: boolean = false;
   profile: any;
-  gq_type: any;
+
+  fitnessGoalChoices = [
+    { label: 'Lose Weight', value: 1 },
+    { label: 'Build Muscle', value: 2 },
+    { label: 'Improve Endurance', value: 3 },
+    { label: 'Get Stronger', value: 4 },
+    { label: 'Stay Fit and Healthy', value: 5 },
+    { label: 'Other', value: 6 }
+  ];
 
   constructor(
     private profileService: ProfileService,
@@ -27,7 +35,7 @@ export class ProfilePage implements OnInit {
     private loginService: LoginService,
     ) { }
 
-  ngOnInit() {
+  ngOnInit() {    
     this.getUser();
     this.getProfile();
     this.isAdmin = this.loginService.isAdmin();
@@ -46,6 +54,11 @@ export class ProfilePage implements OnInit {
       data => this.profile = data,
       error => console.error(error)
     );
+  }
+
+  getGoalLabel(goalValue: number): string {
+    const goal = this.fitnessGoalChoices.find(choice => choice.value === goalValue);
+    return goal ? goal.label : '';
   }
 
   async toPersonalDetails() {

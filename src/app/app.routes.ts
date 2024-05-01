@@ -55,11 +55,6 @@ export const routes: Routes = [
     ]
   },
   {
-    path: 'personal-data',
-    loadComponent: () => import('./user/personal-data/personal-data.page').then( m => m.PersonalDataPage),
-    canActivate: [IsAuthenticatedGuardGuard]
-  },
-  {
     path: 'achievements',
     loadComponent: () => import('./progress/achievements/achievements.page').then( m => m.AchievementPage),
     canActivate: [IsAuthenticatedGuardGuard]
