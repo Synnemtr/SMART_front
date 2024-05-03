@@ -26,26 +26,7 @@
       <p>Goal: {{ getGoalLabel(profile.goal) }}</p>
       <p>Sub-Goal: {{ profile.sub_goal }}</p>
     </ion-card-content>    
-  </ion-card>
 
-  <ion-card >
-    <ion-card-header>
-      <ion-card-title> Personal info: </ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <p>BMR: {{ profile.bmr }}</p>
-      <p>BMI: {{ profile.bmi }}</p>
-      <p>Sex: {{ profile.sex }}</p>
-      <p>Date of birth: {{ profile.date_of_birth }}</p>
-      <p>Weight: {{ profile.weight }}</p>
-      <p>Height: {{ profile.height }}</p>
-      <p>Training per week: {{ profile.training_per_week }}</p>
-      <p>Preferred Diet: {{ profile.preferred_diet }}</p>
-    </ion-card-content>    
-  </ion-card>
-
-  <ion-card>
     <div class="ion-margin-top">
       <ion-button expand="full" class="ion-margin-top" color="primary" (click)="logout()">Log out</ion-button>
     </div>

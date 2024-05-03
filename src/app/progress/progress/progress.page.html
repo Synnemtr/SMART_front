@@ -4,172 +4,220 @@
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <ion-card *ngIf="profile" class="card">
+<ion-content *ngIf="profile && recommendedElement && gameElement" class="card">
+  <ion-card *ngIf="recommendedElement.id === 1">
+    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
+      <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+    </ion-card-header>
 
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title>Progress: {{ getGoalLabel(profile.goal) }}</ion-card-title>
-      </ion-card-header>
-    
-      <ion-card-content>
-        <form [formGroup]="updateProfileForm">
-          <ion-progress-bar [value]="profile.goal_progress / progressbarSubgoal(profile.sub_goal)"></ion-progress-bar> 
-          Sub-Goal: {{ profile.sub_goal }}
+    <ion-card-content>
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col> Username  </ion-col>
+            <ion-col> Number of food-intake </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-list>
+        <ion-item *ngFor="let rankedFood of rankedFoods">
           <ion-grid>
             <ion-row>
-              <ion-col>
-                <ng-container>
-                  <ion-input class="primary-input" placeholder="Goal progress" type="number" formControlName="goal_progress"></ion-input>
-                </ng-container>
-              </ion-col>
-              <ion-col> 
-                <ion-button [disabled]="!updateProfileForm.valid" expand="block" (click)="updateGoal()">Update</ion-button>
-              </ion-col>
-            </ion-row>
-          </ion-grid>
-        </form>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title>Achievements</ion-card-title>
-      </ion-card-header>
-    
-      <ion-card-content>
-        <ion-list>
-          <ion-item *ngFor="let achievement of activeAchievements; let i = index">
-            <ion-grid *ngIf="i === 0">
-              <ion-row>
-                <ion-col>
-                  {{ achievement.name }}
-                  <ion-progress-bar value="{{achievement.current_points/achievement.threshold}}"></ion-progress-bar>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-        </ion-list>
-        
-        <ion-button fill="clear" (click)="toAchievements()">To achievements</ion-button>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title>Badges</ion-card-title>
-      </ion-card-header>
-    
-      <ion-card-content>
-          <ion-item *ngFor="let badge of userBadges; let i = index">
-            <ion-grid *ngIf="i===0">
-              <ion-row>
-                <ion-col>Laste BADGE obtained: </ion-col>
-                <ion-col>{{ badge.name }}</ion-col>
-                <ion-col>, at date: </ion-col>
-                <ion-col>{{ badge.date_earned }}</ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-
-        <ion-button fill="clear" (click)="toBadges()">To badges</ion-button>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title>Quiz</ion-card-title>
-      </ion-card-header>
-    
-      <ion-card-content>
-        <ion-item *ngIf="currentQuestion">
-          <ion-grid>
-            <ion-row>
-              <ion-col>{{ currentQuestion.question }}</ion-col>
-            </ion-row>
-            <ion-row *ngFor="let option of [currentQuestion.option_one, currentQuestion.option_two, currentQuestion.option_three, currentQuestion.option_four]">
-              <ion-col>
-                <ion-button expand="block" (click)="handleAnswer(option)">{{ option }}</ion-button>
-              </ion-col>
+              <ion-col>{{ rankedFoods.username }}</ion-col>
+              <ion-col>{{ rankedFoods.total_food_consumed }}</ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
-        
-        <p>{{ message }}</p>
-        <p>Your score: {{ score }}</p>
-        
-        <ion-button expand="block" (click)="startQuiz()">Start Quiz</ion-button>
-      </ion-card-content>
-    </ion-card>
+      </ion-list>
 
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title>Leaderboard Points</ion-card-title>
-      </ion-card-header>
-
-      <ion-card-content>
-        <ion-item>
-          <ion-grid>
-            <ion-row>
-              <ion-col>Username</ion-col>
-              <ion-col>Total Points</ion-col>
-            </ion-row>
-            <ion-row>
-              <ion-col>{{ user.username }}</ion-col>
-              <ion-col>{{ profile.total_points }}</ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title> Achievement Ranking</ion-card-title>
-      </ion-card-header>
-    
-      <ion-card-content>
-        <ion-item>
-          <ion-grid>
-            <ion-row>
-              <ion-col> Username  </ion-col>
-              <ion-col> Number of achievements </ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-        <ion-list>
-          <ion-item *ngFor="let user of rankingAchievements">
-            <ion-grid>
-              <ion-row>
-                <ion-col>{{ user.username }}</ion-col>
-                <ion-col>{{ user.achievement_count }}</ion-col>
-              </ion-row>
-            </ion-grid>
-          </ion-item>
-        </ion-list>
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title>Positive feedback</ion-card-title>
-      </ion-card-header>
-    
-      <ion-card-content>
-        TODO: display random positive feedback from backend-API-call using positiveFeedback() function ?
-      </ion-card-content>
-    </ion-card>
-
-    <ion-card>
-      <ion-card-header expand="full" class="title" color="primary">
-        <ion-card-title>Game element placeholder</ion-card-title>
-      </ion-card-header>
-    
-      <ion-card-content>
-        <!-- <p *ngIf="profile.HEXAD_12_type === gameElements.HEXAD_12"> Game-element: {{ (userGameElements | slice:0:1)[0].name }}</p> -->
-      </ion-card-content>
-    </ion-card>
-
-
+      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
+      <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
+    </ion-card-content>
   </ion-card>
+
+  <ion-card *ngIf="recommendedElement.id === 2">
+    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
+      <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-list>
+        <ion-item *ngFor="let achievement of activeAchievements; let i = index">
+          <ion-grid *ngIf="i === 0">
+            <ion-row>
+              <ion-col>
+                {{ achievement.name }}
+                <ion-progress-bar value="{{achievement.current_points/achievement.threshold}}"></ion-progress-bar>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+      <ion-button fill="clear" (click)="toAchievements()">To achievements</ion-button>
+
+      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
+      <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="recommendedElement.id === 3">
+    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
+      <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col>Username</ion-col>
+            <ion-col>Total Recipies</ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>{{ user.username }}</ion-col>
+            <ion-col> Number of recipies made the last week leaderboard </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+
+      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
+      <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="recommendedElement.id === 4">
+    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
+      <ion-card-title> This element does not exist. TODO: fix</ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+  
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="recommendedElement.id === 5">
+    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
+      <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item *ngFor="let badge of userBadges; let i = index">
+        <ion-grid *ngIf="i===0">
+          <ion-row>
+            <ion-col>Laste BADGE obtained: </ion-col>
+            <ion-col>{{ badge.name }}</ion-col>
+            <ion-col>, at date: </ion-col>
+            <ion-col>{{ badge.date_earned }}</ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-button fill="clear" (click)="toBadges()">To badges</ion-button>
+
+      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
+      <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="recommendedElement.id === 6">
+    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
+      <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item *ngIf="currentQuestion">
+        <ion-grid>
+          <ion-row>
+            <ion-col>{{ currentQuestion.question }}</ion-col>
+          </ion-row>
+          <ion-row *ngFor="let option of [currentQuestion.option_one, currentQuestion.option_two, currentQuestion.option_three, currentQuestion.option_four]">
+            <ion-col>
+              <ion-button expand="block" (click)="handleAnswer(option)">{{ option }}</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      
+      <p>{{ message }}</p>
+      <p>Your score: {{ profile.total_points }}</p>
+      <ion-button expand="block" (click)="startQuiz()">Start Quiz</ion-button>
+
+      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
+      <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card *ngIf="recommendedElement.id === 7">
+    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
+      <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <form [formGroup]="updateProfileForm">
+        <ion-progress-bar [value]="profile.goal_progress / progressbarSubgoal(profile.sub_goal)"></ion-progress-bar> 
+        <p> Goal: {{ getGoalLabel(profile.goal) }}, Sub-Goal: {{ profile.sub_goal }} </p>
+        <ion-grid>
+          <ion-row>
+            <ion-col>
+              <ng-container>
+                <ion-input class="primary-input" placeholder="Goal progress" type="number" formControlName="goal_progress"></ion-input>
+              </ng-container>
+            </ion-col>
+            <ion-col> 
+              <ion-button [disabled]="!updateProfileForm.valid" expand="block" (click)="updateGoal()">Update</ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </form>
+
+      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
+      <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header expand="full" class="title" color="primary">
+      <ion-card-title>Positive feedback</ion-card-title>
+    </ion-card-header>
+  
+    <ion-card-content>
+      TODO: display feedback from backend-API-call using positiveFeedback() function ?
+    </ion-card-content>
+  </ion-card>
+
+  <ion-card>
+    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
+      <ion-card-title>Ranking </ion-card-title>
+    </ion-card-header>
+
+    <ion-card-content>
+      <ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col> Username  </ion-col>
+            <ion-col> Number of food-intake </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-item>
+      <ion-list>
+        <ion-item *ngFor="let rankedFood of rankedFoods">
+          <ion-grid>
+            <ion-row>
+              <ion-col>{{ rankedFood.username }}</ion-col>
+              <ion-col>{{ rankedFood.total_food_consumed }}</ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-item>
+      </ion-list>
+
+      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
+      <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
+    </ion-card-content>
+  </ion-card>
+
 </ion-content>

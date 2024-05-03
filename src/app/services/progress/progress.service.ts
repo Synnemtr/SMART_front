@@ -2,6 +2,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environments/environment';
 import { LoginService } from '../login/login.service';
+import { ActionSheetController, AlertController } from '@ionic/angular';
 
 
 @Injectable({
@@ -9,11 +10,19 @@ import { LoginService } from '../login/login.service';
 })
 export class ProgressService {
 
-  constructor(private httpClient: HttpClient, private isAuthenticated: LoginService) { }
+  constructor(
+    private httpClient: HttpClient, 
+    private isAuthenticated: LoginService, 
+    public actionSheetController: ActionSheetController,
+    private alertController: AlertController,) { }
 
   private headers = new HttpHeaders()
 
-  private gameElementAPI = environment.backendUrl + "/gamification-element"
+  private recommendedElements = environment.backendUrl + "/recommender-system"
+  private rankedFood = environment.backendUrl + "/foods/ranking/food-by-users"
+
+  private ratingElementAPI = environment.backendUrl + "/recommender-rating"
+  private gameElementAPI = environment.backendUrl + "/game-element"
   private gameQuizAPI = environment.backendUrl + "/game-element-quiz"
 
   private achievementsAPI = environment.backendUrl + "/achievements"
@@ -24,6 +33,16 @@ export class ProgressService {
 
   private badgesAPI = environment.backendUrl + "/badges"
   private userBadgesAPI = environment.backendUrl + "/badges/earned"
+
+  getRecommendedElements() {
+    this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
+    return this.httpClient.get(this.recommendedElements + "/user/", {headers: this.headers});
+  }
+
+  getRankedFoods() {
+    this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
+    return this.httpClient.get(this.rankedFood + "/", {headers: this.headers});
+  }
 
   getGameElements() {
     this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
@@ -98,6 +117,63 @@ export class ProgressService {
   getGameQuiz() {
     this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
     return this.httpClient.get(this.gameQuizAPI + "/", {headers: this.headers});
+  }
+
+  getRecommenderRating() {
+    this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
+    return this.httpClient.get(this.ratingElementAPI + "/", {headers: this.headers});
+  }
+
+  postRecommenderRating(data: any) {
+    this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
+    return this.httpClient.post(this.ratingElementAPI + "/", data, {headers: this.headers});
+  }
+
+  private userFoodIntakeAPI = environment.backendUrl + "/foods/food-intake"
+  newUserFoodIntake(data:any) {
+    this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
+    return this.httpClient.post(this.userFoodIntakeAPI + "/", data, {headers: this.headers});
+  }
+
+  async inputFoodQuantity(id: number) {
+    const alert = await this.alertController.create({
+      header: 'Enter Quantity',
+      inputs: [
+        {
+          name: 'quantity',
+          type: 'number',
+          placeholder: 'Enter quantity'
+        }
+      ],
+      buttons: [
+        {
+          text: 'Ok',
+          handler: (data) => {
+            this.addToEatingJournal(id, data.quantity);
+          }
+        }
+      ]
+    });
+    await alert.present();
+  }
+
+  async addMeal(id: number) {
+    const actionSheet = await this.actionSheetController.create({
+      buttons: [{
+        text: 'Add to Eating Journal',
+        handler: () => {
+          this.inputFoodQuantity(id);
+        }
+      }, {
+        text: 'Cancel',
+        role: 'cancel',
+      }]
+    });
+    await actionSheet.present();
+  }
+
+  addToEatingJournal(id: number, quantity: number) {
+    this.newUserFoodIntake({food: id, quantity: quantity}).subscribe();
   }
 
 }

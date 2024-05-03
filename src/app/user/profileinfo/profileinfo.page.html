@@ -45,8 +45,6 @@
       <ion-select-option *ngFor="let choice of dietChoices" [value]="choice.value">{{choice.label}}</ion-select-option>
     </ion-select>
 
-    <ion-input type="file" enctype="multipart/form-data" (change)="onFileSelected($event)"> </ion-input>
-
     <div class="ion-margin-top">
       <ion-button *ngIf="!isUpdate" [disabled]="!profileinfoForm.valid" expand="block" (click)="registerProfileInfo()">Submit</ion-button>
       <ion-button *ngIf="isUpdate" [disabled]="!updateProfileForm.valid" expand="block" (click)="updateProfile()">Update</ion-button>

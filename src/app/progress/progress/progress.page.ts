@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import { RouterModule, Router } from '@angular/router';
@@ -24,6 +24,12 @@ export class ProgressPage implements OnInit {
   currentSubgoalProgress: number = 0;
   lastThreeMeals: any[] = [];
 
+  recommendedElements: any;
+  recommendedElement: any;
+  ratingElement: any; 
+  rating: number = 0;
+  isButtonClicked = false;
+  gameElement: any; 
   gameElements: any; 
   quizData: any;
   currentQuestion: any;
@@ -32,6 +38,7 @@ export class ProgressPage implements OnInit {
 
   activeAchievements: any;
   rankingAchievements: any;
+  rankedFoods: any; 
   userBadges: any;
 
   fitnessGoalChoices = [
@@ -49,18 +56,71 @@ export class ProgressPage implements OnInit {
     private profileService: ProfileService,
     private progressService: ProgressService,
     private formBuilder: FormBuilder,
+    private cdr: ChangeDetectorRef, 
     ) { }
 
   ngOnInit() {
     this.updateProfileForm = this.formBuilder.group({
       goal_progress: [''],
+      total_points: [''],
     });
     this.getUserAndProfile()
     this.getActiveAchievement()
     this.getUserBadges()
     this.getQuizData()
     this.getRankingAchievements();
+    this.getRatingElement()
+
     this.getGameElements()
+  }
+
+  addMeal(id: number) {
+    this.progressService.addMeal(id);
+  }
+
+  getRecommendedElement() {
+    this.progressService.getRecommendedElements().subscribe(
+      data => {
+        this.recommendedElements = data;
+        console.log("Recommended Elements: ", this.recommendedElements);
+        this.setRecommendedElement();
+      },
+      error => console.error(error)
+    );
+  }
+
+  setRecommendedElement() {
+    if (this.recommendedElements && this.recommendedElements.length > 0) {
+      this.recommendedElement = this.recommendedElements[0];
+      if (this.gameElements && this.gameElements.length > 0) {
+        this.gameElement = this.gameElements.find((element: any) => element.id === this.recommendedElement.id);
+      }
+      this.cdr.detectChanges();
+    }
+    console.log("Recommended Element: ", this.recommendedElement);
+    console.log("Game Element: ", this.gameElement);
+  }
+
+  getRatingElement() {
+    this.progressService.getRecommenderRating().subscribe(
+      data => {
+        this.ratingElement = data;
+        console.log("Ranking Elements: ", this.ratingElement);
+      },
+      error => console.error(error)
+    );
+  }
+
+  postRatingElement(user_id: number, game_element_id: number, rating: number) {
+    const data = {
+      "user_id": user_id,
+      "game_element_id": game_element_id,
+      "rating": rating
+    };
+    this.progressService.postRecommenderRating(data).subscribe(() => {
+        location.reload();
+    }, 
+    error => console.error(error));
   }
 
   getGoalLabel(goalValue: number): string {
@@ -84,12 +144,16 @@ export class ProgressPage implements OnInit {
       this.profileService.updateProfile(currentProfileData).subscribe({
         next: (response: any) => {
           console.log(response);
+          location.reload();
         },
-        error: (e) => console.log(e.error),
-        });
+        error: (e) => {
+          console.log(e.error);
+          location.reload();
+        },
       });
-    }
+    });
   }
+}
 
   getUserAndProfile() {
     this.profileService.getUser().subscribe(
@@ -114,7 +178,7 @@ export class ProgressPage implements OnInit {
   } 
 
   positiveFeedback() {
-
+  
   }
 
   getActiveAchievement() {
@@ -155,12 +219,30 @@ export class ProgressPage implements OnInit {
   }
 
   handleAnswer(option: string) {
+    let updatePointsData: any = new FormData();
     if (option === this.currentQuestion.correct_answer) {
-      this.score++;
+      updatePointsData.append('total_points', '1');
       this.message = 'Correct!';
     } else {
       this.message = `Wrong answer. The correct answer is ${this.currentQuestion.correct_answer}.`;
     }
+
+    this.profileService.getProfile().subscribe((currentProfileData: any) => {
+      for (let pair of updatePointsData.entries()) {
+        currentProfileData[pair[0]] = pair[1];
+      }
+
+      this.profileService.updateProfile(currentProfileData).subscribe({
+        next: (response: any) => {
+          console.log(response);
+          location.reload();
+        },
+        error: (e) => {
+          console.log(e.error);
+          location.reload();
+        },
+      });
+    });
   }
 
   startQuiz() {
@@ -175,11 +257,18 @@ export class ProgressPage implements OnInit {
     });
   }
 
+  getRankingFoods() {
+    this.progressService.getRankedFoods().subscribe((data) => {
+      this.rankedFoods = data;
+    });
+  }
+
   getGameElements() {
     this.progressService.getGameElements().subscribe(
       data => {
         this.gameElements = data;
         console.log("Game Elements: ", this.gameElements);
+        this.getRecommendedElement()
       },
       error => console.error(error)
     );
