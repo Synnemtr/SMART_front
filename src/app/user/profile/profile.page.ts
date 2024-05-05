@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
@@ -33,6 +33,7 @@ export class ProfilePage implements OnInit {
     private profileService: ProfileService,
     public router: Router,
     private loginService: LoginService,
+    private cdr: ChangeDetectorRef,
     ) { }
 
   ngOnInit() {    
@@ -44,14 +45,20 @@ export class ProfilePage implements OnInit {
 
   getUser() {
     this.profileService.getUser().subscribe(
-      data => this.user = data,
+      data => {
+        this.user = data;
+        this.cdr.detectChanges(); 
+      },
       error => console.error(error)
     );
   }
 
   getProfile() {
     this.profileService.getProfile().subscribe(
-      data => this.profile = data,
+      data => {
+        this.profile = data;
+        this.cdr.detectChanges(); 
+      },
       error => console.error(error)
     );
   }
@@ -77,4 +84,5 @@ export class ProfilePage implements OnInit {
   async logout() {
     this.loginService.logout();
   }
+
 }

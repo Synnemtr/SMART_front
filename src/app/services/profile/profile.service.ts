@@ -25,6 +25,11 @@ export class ProfileService {
     return this.httpClient.get(this.profileAPI + "/" + localStorage.getItem("id") + "/", {headers: this.headers});
   }
 
+  getAllProfiles() {
+    this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
+    return this.httpClient.get(this.profileAPI + "/", {headers: this.headers});
+  }
+
   updateProfile(updateInfoForm: any) {
     this.headers = this.headers.set("Authorization", "Token "+this.isAuthenticated.getToken())
     return this.httpClient.put(this.profileAPI + "/" + localStorage.getItem("id") + "/", updateInfoForm, {headers: this.headers});

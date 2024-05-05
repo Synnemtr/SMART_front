@@ -8,6 +8,7 @@
   <ion-card *ngIf="recommendedElement.id === 1">
     <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
       <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+      <p> HEXAD-12: {{ gameElement.HEXAD_12 }} </p>
     </ion-card-header>
 
     <ion-card-content>
@@ -24,7 +25,8 @@
           <ion-grid>
             <ion-row>
               <ion-col>{{ rankedFoods.username }}</ion-col>
-              <ion-col>{{ rankedFoods.total_food_consumed }}</ion-col>
+              <!-- <ion-col>{{ rankedFoods.total_food_consumed }}</ion-col> -->
+              <ion-col> Number of food-intake /recepies made (over a timeperiod) </ion-col>
             </ion-row>
           </ion-grid>
         </ion-item>
@@ -39,6 +41,7 @@
   <ion-card *ngIf="recommendedElement.id === 2">
     <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
       <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+      <p> HEXAD-12: {{ gameElement.HEXAD_12 }} </p>
     </ion-card-header>
 
     <ion-card-content>
@@ -65,18 +68,15 @@
   <ion-card *ngIf="recommendedElement.id === 3">
     <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
       <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+      <p> HEXAD-12: {{ gameElement.HEXAD_12 }} </p>
     </ion-card-header>
 
     <ion-card-content>
-      <ion-item>
+      <ion-item *ngFor="let p of profiles.slice(0, 5); let i = index">
         <ion-grid>
           <ion-row>
-            <ion-col>Username</ion-col>
-            <ion-col>Total Recipies</ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col>{{ user.username }}</ion-col>
-            <ion-col> Number of recipies made the last week leaderboard </ion-col>
+            <ion-col> User: {{ p.user }}</ion-col>
+            <ion-col> ,with points: {{p.total_points }}</ion-col>
           </ion-row>
         </ion-grid>
       </ion-item>
@@ -87,19 +87,10 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="recommendedElement.id === 4">
-    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
-      <ion-card-title> This element does not exist. TODO: fix</ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-  
-    </ion-card-content>
-  </ion-card>
-
   <ion-card *ngIf="recommendedElement.id === 5">
     <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
       <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+      <p> HEXAD-12: {{ gameElement.HEXAD_12 }} </p>
     </ion-card-header>
 
     <ion-card-content>
@@ -124,6 +115,7 @@
   <ion-card *ngIf="recommendedElement.id === 6">
     <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
       <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+      <p> HEXAD-12: {{ gameElement.HEXAD_12 }} </p>
     </ion-card-header>
 
     <ion-card-content>
@@ -150,9 +142,10 @@
     </ion-card-content>
   </ion-card>
 
-  <ion-card *ngIf="recommendedElement.id === 7">
+  <ion-card *ngIf="recommendedElement.id === 8">
     <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
       <ion-card-title *ngIf="recommendedElement.id === gameElement.id"> Game element:  {{gameElement.name}} </ion-card-title>
+      <p> HEXAD-12: {{ gameElement.HEXAD_12 }} </p>
     </ion-card-header>
 
     <ion-card-content>
@@ -179,6 +172,7 @@
     </ion-card-content>
   </ion-card>
 
+
   <ion-card>
     <ion-card-header expand="full" class="title" color="primary">
       <ion-card-title>Positive feedback</ion-card-title>
@@ -186,37 +180,6 @@
   
     <ion-card-content>
       TODO: display feedback from backend-API-call using positiveFeedback() function ?
-    </ion-card-content>
-  </ion-card>
-
-  <ion-card>
-    <ion-card-header expand="full" class="title" color="primary" style="margin-bottom: 20px;">
-      <ion-card-title>Ranking </ion-card-title>
-    </ion-card-header>
-
-    <ion-card-content>
-      <ion-item>
-        <ion-grid>
-          <ion-row>
-            <ion-col> Username  </ion-col>
-            <ion-col> Number of food-intake </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-item>
-      <ion-list>
-        <ion-item *ngFor="let rankedFood of rankedFoods">
-          <ion-grid>
-            <ion-row>
-              <ion-col>{{ rankedFood.username }}</ion-col>
-              <ion-col>{{ rankedFood.total_food_consumed }}</ion-col>
-            </ion-row>
-          </ion-grid>
-        </ion-item>
-      </ion-list>
-
-      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
-      <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
-      <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
     </ion-card-content>
   </ion-card>
 

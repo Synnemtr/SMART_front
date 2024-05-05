@@ -99,7 +99,7 @@ export class GqPage {
     // Send the data to the API
     this.service.answerGamificationQuestionnaire(data).subscribe({
       // next: () => this.router.navigate(['/mq'])
-      next: () => this.router.navigate(['/tabs/progress'])
+      next: () => this.router.navigate(['/tabs/profile'])
     });
   }
 

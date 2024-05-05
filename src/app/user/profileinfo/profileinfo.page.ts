@@ -68,7 +68,6 @@ export class ProfileInfoPage implements OnInit {
   ngOnInit() {
     if (this.isUpdate) {
       this.updateProfileForm = this.formBuilder.group({
-        picture: [null],
         weight: [''],
         goal: [''],
         sub_goal: [''],
@@ -77,7 +76,6 @@ export class ProfileInfoPage implements OnInit {
       });
     } else { 
       this.profileinfoForm = this.formBuilder.group({
-        picture: [null, Validators.required],
         sex: ['', Validators.required],
         year_of_birth: ['', [Validators.required, Validators.pattern('^[0-9]{4}$')]],
         month_of_birth: ['', [Validators.required, Validators.min(1), Validators.max(12)]],

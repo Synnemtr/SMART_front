@@ -20,6 +20,7 @@ import { take } from 'rxjs/operators';
 export class ProgressPage implements OnInit {
   user: any;
   profile: any;
+  profiles: any; 
   updateProfileForm: FormGroup = new FormGroup({});
   currentSubgoalProgress: number = 0;
   lastThreeMeals: any[] = [];
@@ -33,7 +34,6 @@ export class ProgressPage implements OnInit {
   gameElements: any; 
   quizData: any;
   currentQuestion: any;
-  score: number = 0; // TODO: store this in backend
   message: string = '';
 
   activeAchievements: any;
@@ -65,6 +65,7 @@ export class ProgressPage implements OnInit {
       total_points: [''],
     });
     this.getUserAndProfile()
+    this.getAllProfiles()
     this.getActiveAchievement()
     this.getUserBadges()
     this.getQuizData()
@@ -163,6 +164,16 @@ export class ProgressPage implements OnInit {
     this.profileService.getProfile().subscribe(
       data => {
         this.profile = data;
+      },
+      error => console.error(error)
+    );
+  }
+
+  getAllProfiles() {
+    this.profileService.getAllProfiles().subscribe(
+      data => {
+        this.profiles = data;
+        this.profiles.sort((a: any, b: any) => b.total_points - a.total_points);
       },
       error => console.error(error)
     );
