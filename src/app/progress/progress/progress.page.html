@@ -32,7 +32,7 @@
         </ion-item>
       </ion-list>
 
-      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <p> Feedback: On a scale from 1-5 (where 1 is not at all and 5 is very much) how much did you like this element?  </p>
       <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
       <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
     </ion-card-content>
@@ -59,7 +59,7 @@
       </ion-list>
       <ion-button fill="clear" (click)="toAchievements()">To achievements</ion-button>
 
-      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <p> Feedback: On a scale from 1-5 (where 1 is not at all and 5 is very much) how much did you like this element?  </p>
       <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
       <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
     </ion-card-content>
@@ -81,7 +81,7 @@
         </ion-grid>
       </ion-item>
 
-      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <p> Feedback: On a scale from 1-5 (where 1 is not at all and 5 is very much) how much did you like this element?  </p>
       <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
       <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
     </ion-card-content>
@@ -106,7 +106,7 @@
       </ion-item>
       <ion-button fill="clear" (click)="toBadges()">To badges</ion-button>
 
-      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <p> Feedback: On a scale from 1-5 (where 1 is not at all and 5 is very much) how much did you like this element?  </p>
       <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
       <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
     </ion-card-content>
@@ -136,7 +136,7 @@
       <p>Your score: {{ profile.total_points }}</p>
       <ion-button expand="block" (click)="startQuiz()">Start Quiz</ion-button>
 
-      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <p> Feedback: On a scale from 1-5 (where 1 is not at all and 5 is very much) how much did you like this element?  </p>
       <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
       <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
     </ion-card-content>
@@ -166,14 +166,14 @@
         </ion-grid>
       </form>
 
-      <p> Feedback: On a scale from 0-5 (where 0 is not at all and 5 is very much) how much did you like this element?  </p>
+      <p> Feedback: On a scale from 1-5 (where 1 is not at all and 5 is very much) how much did you like this element?  </p>
       <ion-input type="number" min="0" max="5" [(ngModel)]="rating"></ion-input>
       <ion-button [disabled]="!rating || isButtonClicked"  (click)="postRatingElement(profile.user, gameElement.id, rating); isButtonClicked = true">Submit</ion-button>
     </ion-card-content>
   </ion-card>
 
 
-  <ion-card>
+  <!-- <ion-card>
     <ion-card-header expand="full" class="title" color="primary">
       <ion-card-title>Positive feedback</ion-card-title>
     </ion-card-header>
@@ -181,6 +181,6 @@
     <ion-card-content>
       TODO: display feedback from backend-API-call using positiveFeedback() function ?
     </ion-card-content>
-  </ion-card>
+  </ion-card> -->
 
 </ion-content>
